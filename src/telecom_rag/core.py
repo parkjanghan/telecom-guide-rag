@@ -6,6 +6,7 @@ import json
 import os
 import re
 import sqlite3
+import threading
 from collections import defaultdict
 from pathlib import Path
 from urllib.parse import urlparse
@@ -133,7 +134,8 @@ class Embedder:
         self.tokenizer.no_truncation()
         self.tokenizer.no_padding()
         runtime.mkdir(parents=True, exist_ok=True)
-        self.cache = sqlite3.connect(runtime / 'embeddings.sqlite3')
+        self._cache_lock = threading.RLock()
+        self.cache = sqlite3.connect(runtime / 'embeddings.sqlite3', check_same_thread=False)
         self.cache.execute('CREATE TABLE IF NOT EXISTS vectors (key TEXT PRIMARY KEY, vector TEXT NOT NULL)')
         self.model_hash = hashlib.sha256((self.model.model._model_dir / config['embedding_file']).read_bytes()).hexdigest()
         self.cache.execute('CREATE TABLE IF NOT EXISTS model_identity (signature TEXT PRIMARY KEY, artifact_hash TEXT NOT NULL)')
@@ -151,6 +153,10 @@ class Embedder:
         return len(self.tokenizer.encode(text).ids)
 
     def embed(self, texts: list[str], kind: str) -> list[list[float]]:
+        with self._cache_lock:
+            return self._embed(texts, kind)
+
+    def _embed(self, texts: list[str], kind: str) -> list[list[float]]:
         if kind not in {'query', 'passage'}:
             raise ValueError(kind)
         result = [None] * len(texts)
@@ -300,7 +306,16 @@ class RetrievalStore:
         (self.runtime / 'build_manifest.json').write_text(json.dumps(stats, ensure_ascii=False, indent=2), encoding='utf-8')
         return stats
 
-    def search_topics(self, question: str, k: int | None = None) -> list[dict]:
+    def search_topics(self, question: str, k: int | None = None, strategy: str = 'single') -> list[dict]:
+        self.last_semantic_plan = None
+        if strategy == 'semantic':
+            from .semantic_plan import SemanticPlanner
+            self.last_semantic_plan = SemanticPlanner(self.repo, cache_dir=self.runtime/'semantic_plans').plan(question)
+            return self.search_topics_by_queries(self.last_semantic_plan['queries'], k)
+        if strategy == 'clauses':
+            return self.search_topics_by_clauses(question, k)
+        if strategy != 'single':
+            raise ValueError('Unknown search strategy: ' + strategy)
         self.check_index()
         collection = self.collections[self.config['topic_collection']]
         if not collection.count():
@@ -312,8 +327,28 @@ class RetrievalStore:
                  'evidence_status': m['evidence_status']} for id, m, d in
                 zip(r['ids'][0], r['metadatas'][0], r['distances'][0])]
 
-    def retrieve(self, question: str, selected_ids: list[str] | None = None) -> dict:
-        ranked = self.search_topics(question)
+    def search_topics_by_clauses(self, question: str, k: int | None = None) -> list[dict]:
+        from .query_expansion import query_plan
+        return self.search_topics_by_queries(query_plan(question), k)
+
+    def search_topics_by_queries(self, plan: list[dict], k: int | None = None) -> list[dict]:
+        from .query_expansion import fuse_candidates
+        self.check_index()
+        collection = self.collections[self.config['topic_collection']]
+        vectors = self.engine.embed([q['text'] for q in plan], 'query')
+        count = min(k or self.config['topic_top_k'], collection.count())
+        result = collection.query(query_embeddings=vectors, n_results=count,
+                                  include=['metadatas', 'distances'])
+        groups = []
+        for ids, metadata, distances in zip(result['ids'], result['metadatas'], result['distances']):
+            groups.append([{'item_id': id, 'name': meta['name'], 'distance': distance,
+                            'evidence_status': meta['evidence_status']} for id, meta, distance in
+                           zip(ids, metadata, distances)])
+        return fuse_candidates(groups, plan, count)
+
+    def retrieve(self, question: str, selected_ids: list[str] | None = None, strategy: str = 'single', evidence_mode: str | None = None) -> dict:
+        from .query_expansion import query_plan
+        ranked = self.search_topics(question, strategy=strategy)
         automatic = selected_ids is None
         selected_ids = list(dict.fromkeys(selected_ids if selected_ids is not None else
                                          [r['item_id'] for r in ranked[:self.config['selected_topic_count']]]))
@@ -327,10 +362,21 @@ class RetrievalStore:
         flags = [{'topic_'+id: True} for id in selected_ids]
         where = {'$and': [{'quality_ok': True}, flags[0] if len(flags)==1 else {'$or':flags}]}
         if any(t['related_chunk_ids'] for t in metadata):
+            mode = evidence_mode or self.config.get('evidence_search_mode','similarity')
+            if mode not in {'similarity','mmr'}:
+                raise ValueError('Unknown evidence search mode')
+            fetch_k = max(self.config['evidence_top_k'], self.config.get('mmr_fetch_k',24)) if mode=='mmr' else self.config['evidence_top_k']
             result = collection.query(query_embeddings=query_vec, where=where,
-                                      n_results=self.config['evidence_top_k'], include=['metadatas','distances'])
-            for record_id, meta, distance in zip(result['ids'][0], result['metadatas'][0], result['distances'][0]):
+                                      n_results=fetch_k, include=['metadatas','distances']+(['embeddings'] if mode=='mmr' else []))
+            indices = list(range(len(result['ids'][0])))
+            if mode=='mmr':
+                from .ranking import mmr_indices
+                indices = mmr_indices(query_vec[0],result['embeddings'][0],self.config['evidence_top_k'],self.config.get('mmr_lambda',0.65))
+            for index in indices:
+                record_id, meta, distance = result['ids'][0][index], result['metadatas'][0][index], result['distances'][0][index]
                 cid = meta['parent_chunk_id']
+                if cid not in self.parents:  # Live chunks are TTL-filtered separately.
+                    continue
                 if cid not in candidates:
                     candidates[cid] = {'distance': distance, 'matched_search_record': record_id,
                                        'matched_char_range': [meta['char_start'],meta['char_end']]}
@@ -353,7 +399,10 @@ class RetrievalStore:
             if t['evidence_status'] in {'missing','partial'}:
                 warnings.append({'kind':'evidence_'+t['evidence_status'],'item_id':t['item_id'],
                                  'notes':t['review_notes'],'external_lookup_topics':t['external_lookup_topics']})
-        return {'question':question,'topic_candidates':ranked,'selected_item_ids':selected_ids,
+        return {'question':question,'search_strategy':strategy,'evidence_mode':evidence_mode or self.config.get('evidence_search_mode','similarity'),
+                'query_plan':(self.last_semantic_plan['queries'] if strategy=='semantic' else query_plan(question) if strategy=='clauses' else [{'text':question,'kind':'whole','start':0,'end':len(question)}]),
+                'semantic_plan':self.last_semantic_plan if strategy=='semantic' else None,
+                'topic_candidates':ranked,'selected_item_ids':selected_ids,
                 'selection_mode':'provisional_top_k' if automatic else 'explicit',
                 'selection_is_confirmed':not automatic,
                 'topic_metadata':metadata,'evidence':evidence,'warnings':warnings,

@@ -10,5 +10,8 @@
   "threads": 4,
   "topic_top_k": 5,
   "selected_topic_count": 3,
-  "evidence_top_k": 8
+  "evidence_top_k": 8,
+  "evidence_search_mode": "similarity",
+  "mmr_fetch_k": 24,
+  "mmr_lambda": 0.65
 }

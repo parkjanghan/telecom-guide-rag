@@ -3,11 +3,11 @@ import json
 from pathlib import Path
 
 
-def evaluate(store, cases_path: Path):
+def evaluate(store, cases_path: Path, strategy: str = 'single'):
     cases = json.loads(cases_path.read_text(encoding='utf-8-sig'))
     results=[]
     for case in cases:
-        ranked=store.search_topics(case['question'])
+        ranked=store.search_topics(case['question'], strategy=strategy)
         ids=[r['item_id'] for r in ranked]
         expected=set(case['expected'])
         def match(n):
@@ -18,7 +18,7 @@ def evaluate(store, cases_path: Path):
         'kind':('previously seen public-board regression, not independent accuracy'
                 if all(c.get('sample_type')=='previously_seen_board_question_paraphrase' for c in cases)
                 else 'authored development smoke checks, not independent accuracy'),
-        'cases':len(results),'top3_matches':sum(r['top3_match'] for r in results),
+        'strategy':strategy,'cases':len(results),'top3_matches':sum(r['top3_match'] for r in results),
         'top5_matches':sum(r['top5_match'] for r in results),'results':results,
     }
     return summary

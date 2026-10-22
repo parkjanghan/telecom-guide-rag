@@ -1,5 +1,5 @@
-# Local collected data
+!**/.gitkeep
+
+# Local original documents
 /data/raw/**
 /data/extracted/**
-/data/chunks/**
-!**/.gitkeep

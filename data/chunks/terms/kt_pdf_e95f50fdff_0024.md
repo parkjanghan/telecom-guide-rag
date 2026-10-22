@@ -1,0 +1,58 @@
+---
+chunk_id: "kt_pdf_e95f50fdff_0024"
+document_id: "kt_pdf_e95f50fdff"
+document_title: "KT_5G_서비스_이용약관"
+title: "제20조 (요금 등의 일할계산)"
+source_registry: "data/SOURCES.md"
+source_pages: [23]
+source_page_start: 23
+source_page_end: 23
+review_status: "draft"
+chunk_policy: "article_first_page_range_preserved"
+selection_reasons: ["공통 계약·변경·납부 본문 조항"]
+extraction_quality_flags: []
+table_review_required: true
+collected_at: "2026-10-22T02:51:58.124882+00:00"
+content_sha256: "39f698631dbcd946351e24f2b08baffddeef4aea81e793b653d1b1e9da3d2d7c"
+previous_in_source: "kt_pdf_e95f50fdff_0023"
+next_in_source: "kt_pdf_e95f50fdff_0025"
+relation_basis: "same_pdf_adjacent_source_range"
+---
+
+# KT_5G_서비스_이용약관 — 제20조 (요금 등의 일할계산)
+
+원문 PDF 페이지: 23
+
+표의 자동 구조화 보조본은 원문 추출 텍스트와 대조하여 검토해야 합니다.
+
+
+### PDF 23쪽 추출 본문
+
+```text
+제20조 (요금 등의 일할계산)
+
+ ① 월정액 및 부가사용료는 서비스 개시일 또는 종료일이 요금월의 중도인 경우 월정액을 그
+  요금월의 일수로 나눈 금액을 일할로 계산하여 청구합니다.
+
+ ② 제1항의 규정에 의한 일수계산에 있어서는 그 날이 24시간 미만이라도 이를 1일로
+  계산합니다.
+
+ ③ 요금월의 중도에 가입계약의 해지, 이용휴지 및 부가서비스 이용계약을 해지한 경우에는 그
+  사유가 발생한 전날까지의 일수에 따라 일할계산 합니다. 요금제를 변경하는 경우에는 그
+  사유가 발생한 당일부터의 일수를 변경 후 요금제의 가입일수에 포함하여 일할계산하고, 그
+  사유가 발생한 전날까지는 변경 전 요금제의 가입일수에 포함하여 일할계산합니다.
+
+ ④ 요금월의 중도에 월정액이 증가하거나 감소하는 경우에는 변경에 따른 월정액의 차액을
+  변경일로부터 일할계산 하여 가감한 금액을 해당월의 월정액으로 합니다.
+
+ ⑤ 요금제를 변경하는 경우 요금제 변경 시점까지의 음성, 문자, 데이터 등의 사용량이 요금제
+  변경일의 전날까지를 기준으로 일할계산된 변경 전 요금제의 음성, 문자, 데이터 등의
+  제공량을 초과한 경우 요금제 변경일 당일의 변경 시점까지 발생한 초과 사용량은 변경 전
+  요금제의 요율에 따라 과금됩니다.
+```
+
+
+## 원문 인접 청크
+
+- 이전 원문: [[kt_pdf_e95f50fdff_0023]]
+- 다음 원문: [[kt_pdf_e95f50fdff_0025]]

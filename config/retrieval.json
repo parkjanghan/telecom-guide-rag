@@ -1,0 +1,14 @@
+{
+  "topic_collection": "kt_task_meta",
+  "evidence_collection": "kt_evidence",
+  "embedding_model": "Xenova/multilingual-e5-small",
+  "embedding_file": "onnx/model_quantized.onnx",
+  "embedding_dimension": 384,
+  "chunk_size_tokens": 360,
+  "chunk_overlap_tokens": 48,
+  "batch_size": 16,
+  "threads": 4,
+  "topic_top_k": 5,
+  "selected_topic_count": 3,
+  "evidence_top_k": 8
+}

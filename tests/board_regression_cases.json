@@ -1,0 +1,129 @@
+[
+  {
+    "id": "board_478352",
+    "question": "약정이 끝난 KT 인터넷과 TV를 재약정하며 화면 문제와 셋톱박스 교체도 해결하고 싶다.",
+    "expected": [
+      "internet_renewal_comparison",
+      "consultation_096"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=478352",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_599198",
+    "question": "KT와 KT M모바일을 모두 보유했는데 새 인터넷에 어떤 결합을 적용하는 편이 유리한가?",
+    "expected": [
+      "consultation_058",
+      "consultation_060"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=599198",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_613213",
+    "question": "KT 인터넷과 TV 약정이 끝난다. TV만 빼고 인터넷과 휴대폰 결합을 유지하거나 타사로 옮기는 것을 비교하고 싶다.",
+    "expected": [
+      "internet_renewal_comparison",
+      "family_bundle_maintenance"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=613213",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_586057",
+    "question": "KT 통신요금 장기 미납이 있는데 다른 통신사로 번호이동할 수 있는가?",
+    "expected": [
+      "consultation_026"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=586057",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_586055",
+    "question": "KT 500메가 인터넷으로 바꾼 뒤 지연이 심하고 업로드가 너무 느리다.",
+    "expected": [
+      "consultation_074"
+    ],
+    "topic_coverage": "linked_draft",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=586055",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_586049",
+    "question": "인터넷 약정 만료 직후 이사를 앞두고 통신사를 유지할지 옮길지 고민한다.",
+    "expected": [
+      "internet_renewal_comparison",
+      "consultation_077"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=586049",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_586028",
+    "question": "KT 인터넷 약정이 끝났고 이사할 예정이다. 재약정과 타사 이동을 비교하며 TV는 해지하고 싶다.",
+    "expected": [
+      "internet_renewal_comparison",
+      "consultation_077"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=586028",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_613620",
+    "question": "분가하면서 기존 KT 인터넷 명의를 부모님께 넘기고 새로 가입할 때 혜택을 받을 수 있나?",
+    "expected": [
+      "wired_ownership_transfer"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=613620",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_613603",
+    "question": "인터넷 판매자의 전화 권유를 믿고 새 인터넷에 가입했는데 기존 계약도 남아 이중가입이 됐다.",
+    "expected": [
+      "internet_sales_dispute"
+    ],
+    "topic_coverage": "missing",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=613603",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_613598",
+    "question": "KT 인터넷과 TV를 오래 썼는데 약정이 갱신된 것인지 모르겠다. 재약정 혜택과 셋톱박스 교체가 궁금하다.",
+    "expected": [
+      "internet_renewal_comparison",
+      "consultation_081"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=613598",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_480802",
+    "question": "KT 인터넷 명의를 다른 사람으로 바꾸고 기존 결합과 약정에 미치는 영향도 확인하고 싶다.",
+    "expected": [
+      "wired_ownership_transfer",
+      "family_bundle_maintenance"
+    ],
+    "topic_coverage": "partial",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=480802",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  },
+  {
+    "id": "board_570350",
+    "question": "무료 인터넷 혜택이라는 전화 안내를 믿었다가 두 통신사 인터넷에 동시에 가입했다. 해결하고 싶다.",
+    "expected": [
+      "internet_sales_dispute"
+    ],
+    "topic_coverage": "missing",
+    "source_url": "https://www.100mb.kr/bbs/board.php?bo_table=customer&wr_id=570350",
+    "sample_type": "previously_seen_board_question_paraphrase"
+  }
+]

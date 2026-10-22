@@ -1,0 +1,21 @@
+[
+ {"id":"g01","question":"통신비 빠져나가는 통장을 제 통장으로 교체하려고 합니다.","expected":["payment_method_change"]},
+ {"id":"g02","question":"휴대폰 요금 결제 날짜를 뒤로 미루고 싶습니다.","expected":["payment_due_date_change"]},
+ {"id":"g03","question":"매달 오는 종이 요금 고지서를 메일로 받으려면요?","expected":["billing_delivery_change"]},
+ {"id":"g04","question":"요금은 확인했는데 기기 할부금이 얼마나 남았는지는 어디서 봐요?","expected":["consultation_020"]},
+ {"id":"g05","question":"이름과 전화번호는 그대로 두고 몇 개월만 휴대폰 사용을 멈출래요.","expected":["mobile_temporary_suspension"]},
+ {"id":"g06","question":"전화번호는 바꾸지 않고 다른 통신사에서 KT로 옮기려고 해요.","expected":["consultation_026"]},
+ {"id":"g07","question":"휴대폰을 잃어버렸습니다. 사용을 막는 방법부터 알려주세요.","expected":["lost_phone_response"]},
+ {"id":"g08","question":"데이터를 샀지만 쓰지 않았어요. 구매를 취소하고 싶습니다.","expected":["consultation_041"]},
+ {"id":"g09","question":"제 폰 데이터를 태블릿과 공유하려는데 핫스팟과 쉐어링의 차이를 모르겠어요.","expected":["consultation_044"]},
+ {"id":"g10","question":"와이파이는 연결됐는데 인터넷이 너무 느립니다.","expected":["consultation_085","consultation_074"],"match":"any"},
+ {"id":"g11","question":"이사해서 인터넷을 새 주소로 옮기려는데 신청 방법과 설치비가 궁금해요.","expected":["consultation_077"]},
+ {"id":"g12","question":"TV에서 구매 비밀번호를 잊어버려 영화 결제를 못 합니다.","expected":["consultation_093"]},
+ {"id":"g13","question":"해외 여행용으로 쓸 데이터 로밍의 가격을 알아보고 싶어요.","expected":["consultation_049"]},
+ {"id":"g14","question":"문자로 온 링크를 눌러서 이상한 앱이 설치됐는데 어떡하죠?","expected":["consultation_064"]},
+ {"id":"m01","question":"제 명의 휴대폰의 요금은 부모님 통장에서 나가요. 제 계좌로 바꾸되 가족결합은 유지하고 싶습니다.","expected":["payment_method_change","family_bundle_maintenance"],"kind":"multi"},
+ {"id":"m02","question":"휴대폰을 해지하면 약정 위약금이 얼마 남는지도 확인하고 싶어요.","expected":["mobile_termination","consultation_034"],"kind":"multi"},
+ {"id":"m03","question":"복지 감면을 신청하려는데 가족결합과 중복되는지도 궁금합니다.","expected":["consultation_051","consultation_059"],"kind":"multi"},
+ {"id":"x01","question":"인터넷 약정이 끝났는데 재약정하는 게 나을지 옮기는 게 나을지 비교해 주세요.","expected":["internet_renewal_comparison"],"kind":"missing"},
+ {"id":"x02","question":"무료로 인터넷을 바꿔준다는 전화를 믿었는데 이중가입이 되었어요.","expected":["internet_sales_dispute"],"kind":"missing"}
+]

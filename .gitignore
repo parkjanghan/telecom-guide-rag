@@ -3,3 +3,10 @@
 # Local original documents
 /data/raw/**
 /data/extracted/**
+
+# Local retrieval runtime and Python environment
+/.runtime/
+/.venv/
+/config/local.json
+__pycache__/
+*.pyc

@@ -1,0 +1,5 @@
+# Local collected data
+/data/raw/**
+/data/extracted/**
+/data/chunks/**
+!**/.gitkeep

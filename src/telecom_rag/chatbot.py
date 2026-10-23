@@ -9,6 +9,8 @@ from .gms import GMSClient, GMSClientError
 from .settings import GMSSettings
 from .external import ExternalLookup, official_url
 from .answer_validation import validate_answer
+from .availability import is_service_topic, TopicUnavailableError
+from .source_presentation import evidence_presentation, topic_context
 
 
 def named_product_sources(parents, question):
@@ -69,11 +71,12 @@ class Chatbot:
     def choose_topics(self,question,history,query):
         ranked=self.store.search_topics(self.bounded_query(query),k=25)
         # Full compact catalog remains as recall fallback while semantic ranking is under review.
-        order=list(dict.fromkeys([r['item_id'] for r in ranked]+list(self.store.topics)))
+        order=[i for i in dict.fromkeys([r['item_id'] for r in ranked]+list(self.store.topics)) if is_service_topic(self.store.topics[i])]
         catalog=[{'id':k,'name':self.store.topics[k]['name'],'summary':self.store.topics[k]['summary'][:150]} for k in order]
         value,usage=self._json('02_topic_select.md',{'question':question,'history':history,'catalog':catalog})
         ids=value.get('selected_ids')
         if not isinstance(ids,list) or len(ids)>4 or any(not isinstance(x,str) or x not in self.store.topics for x in ids) or not isinstance(value.get('reason'),str):raise ValueError('selection_invalid')
+        if any(not is_service_topic(self.store.topics[i]) for i in ids):raise TopicUnavailableError()
         value['selected_ids']=list(dict.fromkeys(ids))
         return value,usage
 
@@ -86,17 +89,41 @@ class Chatbot:
         t=self.store.topics[i]
         return {'id':i,'name':t['name'],'category':t.get('category',''),'summary':t['summary'],'evidence_status':t['evidence_status'],'example_questions':t.get('example_questions',[])}
 
+    def topic_listing(self):
+        active=[];unsupported=[]
+        for item_id,topic in self.store.topics.items():
+            card=self.topic_card(item_id)
+            if is_service_topic(topic):active.append(card)
+            else:unsupported.append({**card,'service_status':'unsupported_draft','reason':topic.get('support_reason','대표 공식 근거 준비 중')})
+        return {'topics':active,'unsupported_topics':unsupported}
+
+    def plan_query(self,question,history,selected_ids):
+        # Topic metadata disambiguates the question; it cannot establish policy facts.
+        if not isinstance(selected_ids,list) or len(selected_ids)>4 or any(not isinstance(i,str) or i not in self.store.topics for i in selected_ids):
+            raise ValueError('topic_invalid')
+        if any(not is_service_topic(self.store.topics[i]) for i in selected_ids):raise TopicUnavailableError()
+        topics=[]
+        for item_id in dict.fromkeys(selected_ids):
+            topic=self.store.topics[item_id]
+            topics.append({'item_id':item_id,'name':topic['name'],
+                           'summary':topic['summary'],'scope':topic.get('scope',''),
+                           'service_types':topic.get('service_types',[]),
+                           'condition_keys':topic.get('condition_keys',[]),
+                           'is_policy_evidence':False})
+        plan,usage=self._json('01_chat_query.md',{'question':question,'history':history,'selected_topics':topics})
+        if set(plan)!={'retrieval_query','external_queries','needs_external','reason'} or not isinstance(plan['retrieval_query'],str) or not plan['retrieval_query'].strip() or len(plan['retrieval_query'])>300 or type(plan['needs_external']) is not bool or not isinstance(plan['external_queries'],list) or len(plan['external_queries'])>2 or any(not isinstance(x,str) or len(x)>100 for x in plan['external_queries']) or not isinstance(plan['reason'],str):raise ValueError('plan_invalid')
+        return plan,usage
+
     def retrieve_node(self,state):
         q,h=state['question'],state['history'];usage={};trace=[]
-        self.progress('질문과 대화 문맥 분석 중')
-        plan,usage['planning']=self._json('01_chat_query.md',{'question':q,'history':h})
-        if set(plan)!={'retrieval_query','external_queries','needs_external','reason'} or not isinstance(plan['retrieval_query'],str) or not plan['retrieval_query'].strip() or len(plan['retrieval_query'])>300 or type(plan['needs_external']) is not bool or not isinstance(plan['external_queries'],list) or len(plan['external_queries'])>2 or any(not isinstance(x,str) or len(x)>100 for x in plan['external_queries']) or not isinstance(plan['reason'],str):raise ValueError('plan_invalid')
-        query=self.bounded_query(plan['retrieval_query'])
         self.progress('관련 상담 주제 선별 중')
         if state['explicit_ids']:
             choice={'selected_ids':state['explicit_ids'],'reason':'사용자가 선택한 상담 주제'}
-        else:choice,usage['selection']=self.choose_topics(q,h,query)
+        else:choice,usage['selection']=self.choose_topics(q,h,q)
         ids=choice['selected_ids']
+        self.progress('질문과 선택한 상담 주제 분석 중')
+        plan,usage['planning']=self.plan_query(q,h,ids)
+        query=self.bounded_query(plan['retrieval_query'])
         if not ids:return {'plan':plan,'choice':choice,'retrieved':{'evidence':[],'topic_metadata':[],'warnings':[]},'trace':trace,'usage':usage}
         self.progress('공식 문서 검색 중')
         retrieved=self.store.retrieve(query,ids)
@@ -152,7 +179,7 @@ class Chatbot:
 
     def generate_node(self,state):
         self.progress('근거를 바탕으로 답변 작성 중')
-        sources={'E'+str(i+1):e for i,e in enumerate(state['retrieved']['evidence'])}
+        sources={'E'+str(i+1):{**e,**evidence_presentation(e,getattr(self.store,'parents',{}).get(e['parent_chunk_id']))} for i,e in enumerate(state['retrieved']['evidence'])}
         ids=state['choice']['selected_ids'];usage=state['usage']
         if sources:
             payload={'question':state['question'],'history':state['history'],'topic_metadata':state['retrieved']['topic_metadata'],'evidence':sources,'external_lookup':state['trace']}
@@ -171,8 +198,9 @@ class Chatbot:
         public=[]
         for sid in used:
             e=sources[sid]
-            public.append({'id':sid,'title':e['title'],'url':e['source_url'] if official_url(e['source_url']) else '', 'parent_chunk_id':e['parent_chunk_id'],'pages':e.get('source_pages',[]),'source_type':e.get('source_type','official_saved_document'),'fetched_at':e.get('fetched_at')})
-        result={**answer,'sources':public,'selected_topics':[{'id':i,'name':self.store.topics[i]['name']} for i in ids],
+            public.append({'id':sid,'title':e['title'],'url':e['source_url'] if official_url(e['source_url']) else '', 'parent_chunk_id':e['parent_chunk_id'],'pages':e.get('source_pages',[]),'source_type':e['source_type'],'source_type_label':e['source_type_label'],'source_format':e['source_format'],'source_origin':e['source_origin'],'source_origin_label':e['source_origin_label'],'fetched_at':e.get('fetched_at')})
+        context=topic_context([{'item_id':i,**self.store.topics[i]} for i in ids])
+        result={**answer,'sources':public,'topic_context':context,'selected_topics':[{'id':i,'name':self.store.topics[i]['name']} for i in ids],
                 'selection_reason':state['choice']['reason'],'warnings':state['retrieved']['warnings'],'external_lookup':state['trace'],
                 'validation':{'citation_ids_and_quotes':True,'inference_disclosure':True,'semantic_entailment':'manual_review_required'},
                 'elapsed_seconds':round(time.monotonic()-state['started'],2),'usage':usage,'pipeline':'LangGraph: retrieve → generate'}
@@ -184,6 +212,7 @@ class Chatbot:
         if not isinstance(history,list) or len(history)>12 or any(not isinstance(x,dict) or x.get('role') not in {'user','assistant'} or not isinstance(x.get('content'),str) or len(x['content'])>12000 for x in history):raise ValueError('history_invalid')
         selected_ids=[] if selected_ids is None else selected_ids
         if not isinstance(selected_ids,list) or len(selected_ids)>4 or any(not isinstance(i,str) or i not in self.store.topics for i in selected_ids):raise ValueError('topic_invalid')
+        if any(not is_service_topic(self.store.topics[i]) for i in selected_ids):raise TopicUnavailableError()
         if type(external_requested) is not bool:raise ValueError('external_invalid')
         self.progress=progress or (lambda stage:None)
         try:

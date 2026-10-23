@@ -1,0 +1,19 @@
+{
+  "kind": "Observed real GMS answer in browser; not full policy accuracy evaluation",
+  "question": "은행 자동납부 출금일은 며칠로 선택할 수 있나요? 공식 FAQ와 서비스 안내를 근거로 알려주세요.",
+  "selected_topic": "payment_due_date_change",
+  "metadata_disclaimer_visible": true,
+  "source_type_labels_visible": [
+    "공식 FAQ",
+    "공식 서비스 가이드"
+  ],
+  "used_evidence_ids": [
+    "E4",
+    "E1",
+    "E3",
+    "E2"
+  ],
+  "citation_button_opened_quote_details": true,
+  "displayed_elapsed_seconds": 17.06,
+  "screenshot": "KT_3단계_근거유형_화면.png"
+}

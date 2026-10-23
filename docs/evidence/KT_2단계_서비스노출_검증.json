@@ -1,0 +1,50 @@
+{
+  "health": {
+    "ready": true,
+    "error": null,
+    "topics": 101,
+    "topic_drafts": 2,
+    "total_topics": 103,
+    "chunks": 1426,
+    "pipeline": "retrieve → generate"
+  },
+  "supported_count": 101,
+  "unsupported_topics": [
+    {
+      "id": "internet_renewal_comparison",
+      "name": "인터넷·TV 재약정과 통신사 이동 비교",
+      "category": "인터넷·와이파이",
+      "summary": "약정 만료 후 갱신 여부, 비교에 필요한 정보, 신청 경로를 안내한다. 개별 협상 혜택·사은품·타사 견적은 외부 확인한다.",
+      "evidence_status": "missing",
+      "example_questions": [
+        "약정이 끝났는데 KT를 재약정할지 다른 통신사로 옮길지 고민돼요."
+      ],
+      "service_status": "unsupported_draft",
+      "reason": "재약정·타사 이동 비교의 대표 공식 근거 미연결. 개인별 제안·사은품·타사 견적을 확인할 자료가 필요합니다."
+    },
+    {
+      "id": "internet_sales_dispute",
+      "name": "인터넷 가입 권유·이중계약 피해 상담",
+      "category": "안전·부가서비스·혜택",
+      "summary": "이중계약·오인 가입 상황을 확인하고 공식 상담·민원 경로로 연결한다. 해지 면제·환급을 확약하지 않는다.",
+      "evidence_status": "missing",
+      "example_questions": [
+        "인터넷을 무료로 바꿔준다는 전화를 믿었다가 이중 계약됐어요."
+      ],
+      "service_status": "unsupported_draft",
+      "reason": "이중계약 피해 상담의 대표 공식 근거 미연결. 실제 계약 확인과 해당 업무의 공식 처리 절차 근거가 필요합니다."
+    }
+  ],
+  "direct_request_checks": [
+    {
+      "id": "internet_renewal_comparison",
+      "status": 422,
+      "error": "topic_unavailable"
+    },
+    {
+      "id": "internet_sales_dispute",
+      "status": 422,
+      "error": "topic_unavailable"
+    }
+  ]
+}

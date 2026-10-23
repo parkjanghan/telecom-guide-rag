@@ -9,7 +9,7 @@ scope: "모바일 관련 안내만 적용; 가이드의 유선 온라인 신청 
 category: "가입·변경·약정"
 service_types: ["모바일"]
 primary_document_id: "kt_service_ServiceAlterGuideL1"
-primary_chunk_ids: ["kt_service_ServiceAlterGuideL1"]
+primary_chunk_ids: ["kt_service_ServiceAlterGuideL1", "kt_faq_KNOW0001270977"]
 related_chunk_ids: ["kt_service_ServiceAlterGuideL1", "kt_faq_KNOW0001270977"]
 review_status: "draft"
 generation_method: "curated intent fields + existing official chunk links; draft"
@@ -49,8 +49,8 @@ external_lookup_topics: []
 - [[명의변경 방법|명의변경 방법]] — 대표 근거
   - 연결 이유: 상담 목적에 대응하는 대표 원문
   - 적용 범위: 모바일 관련 안내만 적용; 가이드의 유선 온라인 신청 안내는 제외
-- [[KNOW0001270977|명의변경은 가족간에만 가능한가요?]] — 보조 근거 후보
-  - 연결 이유: 주제 내부의 다른 조건·기기·절차를 보완하는 원문
+- [[KNOW0001270977|명의변경은 가족간에만 가능한가요?]] — 대표 근거
+  - 연결 이유: 절차 가이드와 함께 명의변경 가능 범위를 필수로 확인하는 원문
   - 적용 범위: FAQ 질문·답변의 적용 상황 확인 후 사용
 
 ## 검토 메모

@@ -1,0 +1,41 @@
+{
+  "checked_at": "2026-10-23",
+  "original_md_count": 1426,
+  "changed_originals": [],
+  "origins": [
+    {
+      "host": "help.kt.com",
+      "url": "https://help.kt.com/robots.txt",
+      "error": "ReadTimeout",
+      "redistribution_permission": "unverified"
+    },
+    {
+      "host": "ermsweb.kt.com",
+      "url": "https://ermsweb.kt.com/robots.txt",
+      "http_status": 200,
+      "robots_text": "User-agent: *\nAllow: /\n\nSitemap: https://ermsweb.kt.com/sitemap.xml",
+      "redistribution_permission": "unverified"
+    },
+    {
+      "host": "product.kt.com",
+      "url": "https://product.kt.com/robots.txt",
+      "http_status": 200,
+      "robots_text": "User-agent: Yeti\r\nUser-agent: Googlebot\r\nUser-agent: Googlebot-News\r\nUser-agent: Googlebot-Image\r\nUser-agent: Daumoa\r\nUser-agent: Bingbot\r\nUser-agent: Slurp\r\nUser-agent: Baiduspider\r\nUser-agent: Applebot\r\nUser-agent: zumbot\r\nAllow: /\r\n# Sitemap\r\nSitemap: https://product.kt.com/sitemap.xml",
+      "redistribution_permission": "unverified"
+    },
+    {
+      "host": "corp.kt.com",
+      "url": "https://corp.kt.com/robots.txt",
+      "http_status": 200,
+      "robots_text": "User-agent: Yeti\r\nUser-agent: Googlebot\r\nUser-agent: Mediapartners-Google\r\nUser-agent: Googlebot-image\r\nAllow: /",
+      "redistribution_permission": "unverified"
+    },
+    {
+      "host": "rdi.kt.com",
+      "url": "https://rdi.kt.com/robots.txt",
+      "error": "ReadTimeout",
+      "redistribution_permission": "unverified"
+    }
+  ],
+  "note": "robots is an access rule, not a redistribution license. Source-specific permission remains unverified."
+}

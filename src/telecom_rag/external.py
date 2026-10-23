@@ -48,7 +48,8 @@ class ExternalLookup:
     def _read(self,path,ttl):
         try:
             value=json.loads(path.read_text(encoding='utf-8'))
-            if 0<=self.clock()-value['created_at']<ttl: return value
+            effective_ttl=min(ttl,value.get('ttl_seconds',ttl))
+            if 0<=self.clock()-value['created_at']<effective_ttl: return value
         except (OSError,ValueError,KeyError,TypeError): pass
         return None
 
@@ -90,8 +91,9 @@ class ExternalLookup:
                     for item in root.findall('./channel/item'):
                         link=item.findtext('link','')
                         if official_url(link):found.append({'url':link,'title':item.findtext('title',''),'summary':item.findtext('description','')[:900],'origin':'web_search','parent_ids':[]})
-                    # Empty search responses may be temporary; do not turn failure into a permanent cache hit.
-                    if found:path.write_text(json.dumps({'created_at':self.clock(),'candidates':found},ensure_ascii=False),encoding='utf-8')
+                    # Cache a successful empty result briefly; do not cache failed requests.
+                    ttl=self.config['search_ttl_seconds'] if found else self.config.get('empty_search_ttl_seconds',300)
+                    path.write_text(json.dumps({'created_at':self.clock(),'ttl_seconds':ttl,'candidates':found},ensure_ascii=False),encoding='utf-8')
                     trace.append({'kind':'web_search','query':query,'official_candidates':len(found)})
                 except (httpx.HTTPError,ValueError,ET.ParseError):
                     found=[];trace.append({'kind':'search_unavailable','query':query})
@@ -144,6 +146,10 @@ class ExternalLookup:
         texts=[doc['text'][a:b] for a,b in spans]
         if len(spans)>1000:raise ValueError('too_many_chunks')
         metadata=[{'document_id':key,'parent_chunk_id':key,'document_version':doc['version'],'source_url':doc['source_url'],'title':doc['title'],'quality_ok':True,'live_document':True,'fetched_at':doc['created_at'],'expires_at':doc['created_at']+self.config['document_ttl_seconds'],'char_start':a,'char_end':b,'source_type':doc['source_type'],**{'topic_'+x:True for x in linked}} for a,b in spans]
+        # An unchanged cached document already indexed for these topics needs no upsert.
+        expected_expiry=doc['created_at']+self.config['document_ttl_seconds']
+        if set(existing['ids'])==set(ids) and all(m.get('document_version')==doc['version'] and m.get('fetched_at')==doc['created_at'] and m.get('expires_at')==expected_expiry and all(m.get('topic_'+x) is True for x in linked) for m in existing['metadatas']):
+            return key
         vectors=self.store.engine.embed(texts,'passage')
         for i in range(0,len(ids),128):col.upsert(ids=ids[i:i+128],documents=texts[i:i+128],metadatas=metadata[i:i+128],embeddings=vectors[i:i+128])
         stale=[x for x in existing['ids'] if x not in ids]

@@ -10,23 +10,27 @@ from .core import RetrievalStore
 from .chatbot import Chatbot
 from .gms import GMSClientError
 from .settings import GMSSettings
+from .availability import TopicUnavailableError
 
 
-def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--port',type=int,default=8765);args=parser.parse_args()
-    repo=Path(__file__).resolve().parents[2];runtime=repo/'.runtime'
+def create_server(repo, runtime, port=8765, *, settings_loader=None, store_factory=None, bot_factory=None):
+    repo=Path(repo);runtime=Path(runtime)
+    settings_loader=settings_loader or GMSSettings.load
+    store_factory=store_factory or RetrievalStore
+    bot_factory=bot_factory or Chatbot
     worker=ThreadPoolExecutor(max_workers=1);lock=threading.Lock()
     def setup():
         try:
             config=json.loads((repo/'config/retrieval.json').read_text(encoding='utf-8-sig'))
-            store=RetrievalStore(repo,runtime,runtime/'models',config);store.check_index()
-            return store,Chatbot(store),None
+            store=store_factory(repo,runtime,runtime/'models',config);store.check_index()
+            return store,bot_factory(store),None
         except Exception:return None,None,'index_not_ready'
     store,bot,start_error=worker.submit(setup).result()
     def health():
-        configured=GMSSettings.load(repo).status()['ready']
-        return {'ready':not start_error and configured,'error':start_error or (None if configured else 'settings_not_ready'), 'topics':len(store.topics) if store else 0,'chunks':len(store.parents) if store else 0,'pipeline':'retrieve → generate'}
+        configured=settings_loader(repo).status()['ready']
+        return {'ready':not start_error and configured,'error':start_error or (None if configured else 'settings_not_ready'), 'topics':len(bot.topic_listing()['topics']) if bot else 0,'topic_drafts':len(bot.topic_listing()['unsupported_topics']) if bot else 0,'total_topics':len(store.topics) if store else 0,'chunks':len(store.parents) if store else 0,'pipeline':'retrieve → generate'}
     def safe_error(exc):
+        if isinstance(exc,TopicUnavailableError):return {'error':'topic_unavailable'}
         if isinstance(exc,GMSClientError):return {'error':exc.code,'http_status':exc.status_code}
         if isinstance(exc,(ValueError,TypeError,KeyError)):return {'error':'validation_failed'}
         return {'error':'internal_error'}
@@ -44,7 +48,7 @@ def main():
         def event(self,data):
             self.wfile.write((json.dumps(data,ensure_ascii=False)+'\n').encode());self.wfile.flush()
         def trusted(self):
-            expected='127.0.0.1:'+str(args.port)
+            expected='127.0.0.1:'+str(self.server.server_port)
             return self.headers.get('Host')==expected and self.headers.get('Origin') in {None,'http://'+expected}
         def do_GET(self):
             if not self.trusted():return self.send(403,{'error':'origin_rejected'})
@@ -53,7 +57,7 @@ def main():
                 kind='application/javascript; charset=utf-8' if self.path.endswith('.js') else 'text/css; charset=utf-8'
                 return self.send(200,(repo/'web'/self.path[1:]).read_bytes(),kind)
             if self.path=='/api/health':return self.send(200,health())
-            if self.path=='/api/topics':return self.send(200,{'topics':[bot.topic_card(i) for i in store.topics] if bot else []})
+            if self.path=='/api/topics':return self.send(200,bot.topic_listing() if bot else {'topics':[],'unsupported_topics':[]})
             self.send(404,{'error':'not_found'})
         def do_POST(self):
             if self.path not in {'/api/chat','/api/chat/stream','/api/explore'}:return self.send(404,{'error':'not_found'})
@@ -92,8 +96,26 @@ def main():
             except Exception as exc:
                 if not stream:self.send(502 if isinstance(exc,GMSClientError) else 422,safe_error(exc))
             finally:lock.release()
-    print('Local: http://127.0.0.1:'+str(args.port),flush=True)
-    try:ThreadingHTTPServer(('127.0.0.1',args.port),Handler).serve_forever()
-    finally:worker.shutdown(wait=True)
+    class AppServer(ThreadingHTTPServer):
+        daemon_threads=True
+        def server_close(self):
+            super().server_close()
+            worker.shutdown(wait=True)
+    try:return AppServer(('127.0.0.1',port),Handler)
+    except Exception:
+        worker.shutdown(wait=True)
+        raise
+
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--port',type=int,default=8765)
+    parser.add_argument('--repo',type=Path,default=Path(__file__).resolve().parents[2])
+    parser.add_argument('--runtime',type=Path)
+    args=parser.parse_args()
+    server=create_server(args.repo,args.runtime or args.repo/'.runtime',args.port)
+    print('Local: http://127.0.0.1:'+str(server.server_port),flush=True)
+    try:server.serve_forever()
+    finally:server.server_close()
 
 if __name__=='__main__':main()

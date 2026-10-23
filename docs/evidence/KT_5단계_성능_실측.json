@@ -1,0 +1,117 @@
+{
+  "scope": "5 explicit-topic calls; one repeated original query; not load test or automatic selection benchmark",
+  "sample_count": 5,
+  "minimum_seconds": 7.86,
+  "median_seconds": 21.7,
+  "maximum_seconds": 25.52,
+  "repeat_seconds": 30.34,
+  "stage_times": [
+    {
+      "id": "original",
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 12.969
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 13.312
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 12.141
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 12.141
+        }
+      ]
+    },
+    {
+      "id": "due_date",
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.516
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 3.688
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 4.156
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 4.156
+        }
+      ]
+    },
+    {
+      "id": "other_account",
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.922
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 4.031
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 21.485
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 21.485
+        }
+      ]
+    },
+    {
+      "id": "transfer",
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.297
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 3.375
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 17.531
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 17.531
+        }
+      ]
+    },
+    {
+      "id": "renewal",
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.985
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 4.079
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 17.625
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 17.625
+        }
+      ]
+    }
+  ],
+  "acceptance": "user acceptance pending; no latency SLA agreed",
+  "repeat_external_events": []
+}

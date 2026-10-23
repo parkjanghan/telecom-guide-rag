@@ -1,0 +1,55 @@
+{
+  "automatic_tests": 82,
+  "variants": [
+    {
+      "size": 360,
+      "overlap": 48,
+      "records": 2091,
+      "max_tokens": 413
+    },
+    {
+      "size": 360,
+      "overlap": 0,
+      "records": 2028,
+      "max_tokens": 413
+    },
+    {
+      "size": 180,
+      "overlap": 24,
+      "records": 3177,
+      "max_tokens": 253
+    }
+  ],
+  "index_run_1": {
+    "kt_task_meta": {
+      "records": 103,
+      "removed_stale_records": 0
+    },
+    "kt_evidence": {
+      "records": 2091,
+      "removed_stale_records": 0
+    },
+    "embeddings_computed": 0,
+    "embedding_cache_hits": 2194
+  },
+  "index_run_2": {
+    "kt_task_meta": {
+      "records": 103,
+      "removed_stale_records": 0
+    },
+    "kt_evidence": {
+      "records": 2091,
+      "removed_stale_records": 0
+    },
+    "embeddings_computed": 0,
+    "embedding_cache_hits": 4388
+  },
+  "top_k_2": {
+    "evidence": 3,
+    "representatives": 2
+  },
+  "top_k_8": {
+    "evidence": 5,
+    "representatives": 2
+  }
+}

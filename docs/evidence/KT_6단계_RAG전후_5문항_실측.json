@@ -1,0 +1,975 @@
+{
+  "date": "2026-10-23",
+  "model": "gpt-6.1-sol",
+  "data_fingerprint": "42ecce1a51092afe6b357672f37014df57090bb56bb251746c58f197e1682b42",
+  "design": "같은 질문, 모델. baseline은 문서 미제공; RAG는 명시 주제 선택. 통계적 독립 성능시험 아님.",
+  "prompt_hashes": {
+    "01_chat_query.md": "786733930647330abee9d623ab75bb35b393f4937ed15bb811cce9ba9697e89f",
+    "02_topic_select.md": "5f40b2f92a4424e0320d5bcf6ebf1eccf6e21bff17640a451db076a1ef2e99c0",
+    "02_document_select.md": "71c8fa03032f3242baafd59c3c5fb162485e796eff4e09eeba0bca6161621d41",
+    "03_generate.md": "f9f698d50f9ee0675b5a5a04e524d4966f474518db0410a298dfb648a0eeaad2"
+  },
+  "cases": [
+    {
+      "id": "original",
+      "question": "제 명의 KT 휴대폰 요금이 부모님 계좌에서 나가요. 제 계좌로만 바꿀 때 부모님 동의가 필요한가요? 가족결합도 유지하고 싶어요.",
+      "selected_ids": [
+        "payment_method_change",
+        "family_bundle_maintenance"
+      ],
+      "without_rag": {
+        "text": "**본인 명의 KT 휴대폰의 납부계좌만 본인 계좌로 바꾸는 경우, 일반적으로 부모님 동의는 필요하지 않습니다.** 본인 확인과 새 계좌 인증은 필요할 수 있습니다.\n\n**납부계좌만 변경하면 가족결합도 일반적으로 유지됩니다.** 회선 명의나 결합 구성원을 바꾸는 것이 아니기 때문입니다.\n\n다만 KT의 현재 세부 처리 기준은 확인하지 못했습니다. 특히 가족 요금이 **통합청구**되고 있다면 별도 처리가 필요한지, KT 휴대폰에서 **114**로 “제 회선 납부계좌만 변경하고 가족결합은 유지하고 싶다”고 확인해 주세요.",
+        "seconds": 15.83,
+        "usage": {
+          "input_tokens": 105,
+          "output_tokens": 370,
+          "total_tokens": 475
+        }
+      },
+      "with_rag": {
+        "claims": [
+          {
+            "text": "본인 명의 KT 휴대폰의 납부계좌를 부모님 계좌에서 본인 계좌로만 바꾸는 경우라면, 통상 부모님의 별도 동의 없이 변경할 수 있다고 판단됩니다. 안내된 동의서 요건은 타인 명의 계좌로 변경하는 경우에 해당합니다. 다만, 확인한 문서에는 이 결론이 직접 명시되어 있지 않습니다.",
+            "inferred": true,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "상품 가입 명의자의 계좌, 간편결제(카카오페이/네이버페이/토스페이/페이코) 또는 신용/체크카드로만 변경 가능합니다."
+              },
+              {
+                "id": "E1",
+                "quote": "타인명의의 계좌 또는 신용/체크카드로 변경하시려면, 가까운 대리점을 방문하시거나 고객센터(국번없이 100번) 전화상담을 통해 가능하며, 이 경우에는 납부자(예금주) 신분증, 명의자 신분증, 납부자(예금자)가 서명한 동의서 원본 등 구비서류가 필요합니다."
+              }
+            ]
+          },
+          {
+            "text": "변경은 마이KT의 ‘마이 > 요금/서비스 > 요금납부 > 납부방법 변경’에서 본인 인증 후 신청할 수 있습니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E2",
+                "quote": "또는 마이 > 요금/서비스 > 요금납부 > 납부방법 변경에서 신청/변경하시면 됩니다.  <br>  * 단, 마이페이지에서 신청/변경 시 본인 인증 후 자동이체로 변경 가능합니다."
+              }
+            ]
+          },
+          {
+            "text": "가족결합이 ‘총액 결합할인’ 또는 ‘프리미엄 가족결합’이라면, 명의·가족관계·회선·요금제는 그대로 두고 납부계좌만 바꾸는 것은 결합 유지에 영향을 주지 않을 것으로 판단됩니다. 확인한 문서에는 이 결론이 직접 명시되어 있지 않습니다. 다른 결합상품이라면 해당 상품의 조건 확인이 필요합니다.",
+            "inferred": true,
+            "citations": [
+              {
+                "id": "E5",
+                "quote": "KT 인터넷 명의자 기준으로 모바일 명의자가 동일인이거나 가족관계인 경우"
+              },
+              {
+                "id": "E3",
+                "quote": "KT 인터넷 명의자 기준으로  \n  모바일 명의자가  \n  동일인이거나 가족관계인 경우"
+              },
+              {
+                "id": "E4",
+                "quote": "가구 내 할인 대상 요금제 이용 고객이 1회선 이상 포함 시 가입 가능하며, 할인액은 할인 대상 요금제 이용 고객이 2회선 이상 포함 시 제공됩니다."
+              }
+            ]
+          }
+        ],
+        "follow_up": "현재 이용 중인 가족결합 상품명이 무엇인가요?",
+        "sources": [
+          {
+            "id": "E1",
+            "title": "통신비 자동납부 변경",
+            "url": "https://help.kt.com/serviceinfo/BillPaymentGuideL10.do",
+            "parent_chunk_id": "kt_service_BillPaymentGuideL10",
+            "pages": [],
+            "source_type": "service_guide",
+            "source_type_label": "공식 서비스 가이드",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E2",
+            "title": "자동납부",
+            "url": "https://help.kt.com/serviceinfo/BillPaymentGuideL3.do",
+            "parent_chunk_id": "kt_service_BillPaymentGuideL3",
+            "pages": [],
+            "source_type": "service_guide",
+            "source_type_label": "공식 서비스 가이드",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E5",
+            "title": "총액 결합할인",
+            "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1133",
+            "parent_chunk_id": "kt_bundle_1133_03",
+            "pages": [],
+            "source_type": "product_detail",
+            "source_type_label": "공식 상품 안내",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E3",
+            "title": "프리미엄 가족결합",
+            "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1193",
+            "parent_chunk_id": "kt_bundle_1193_06",
+            "pages": [],
+            "source_type": "product_detail",
+            "source_type_label": "공식 상품 안내",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E4",
+            "title": "프리미엄 가족결합",
+            "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1193",
+            "parent_chunk_id": "kt_bundle_1193_07",
+            "pages": [],
+            "source_type": "product_detail",
+            "source_type_label": "공식 상품 안내",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          }
+        ],
+        "topic_context": [
+          {
+            "item_id": "payment_method_change",
+            "name": "자동납부 수단 변경",
+            "summary": "회선 명의를 유지하면서 통신요금 납부 계좌·카드 등 납부수단을 변경하는 상담.",
+            "scope": "납부수단 변경; 명의변경과 구별",
+            "source_type": "topic_metadata",
+            "source_type_label": "탐색용 주제 메타데이터",
+            "is_policy_evidence": false
+          },
+          {
+            "item_id": "family_bundle_maintenance",
+            "name": "가족결합 유지 조건 확인",
+            "summary": "계좌·명의·요금제·회선 상태 변경이 기존 가족결합 조건에 영향을 주는지 확인하는 상담.",
+            "scope": "확보한 총액·프리미엄 가족결합 조건을 우선 참고; 다른 상품으로 일반화하지 않음",
+            "source_type": "topic_metadata",
+            "source_type_label": "탐색용 주제 메타데이터",
+            "is_policy_evidence": false
+          }
+        ],
+        "selected_topics": [
+          {
+            "id": "payment_method_change",
+            "name": "자동납부 수단 변경"
+          },
+          {
+            "id": "family_bundle_maintenance",
+            "name": "가족결합 유지 조건 확인"
+          }
+        ],
+        "selection_reason": "사용자가 선택한 상담 주제",
+        "warnings": [
+          {
+            "kind": "evidence_partial",
+            "item_id": "family_bundle_maintenance",
+            "notes": [
+              "기존 10개 파일럿의 목적·별칭·연결을 유지했습니다. 근거 본문의 세부 적용 범위는 다음 연결 점검에서 확인합니다.",
+              "실제 결합상품명을 확인하고 원문에 없는 유지 결론은 추론 고지를 붙입니다."
+            ],
+            "external_lookup_topics": []
+          }
+        ],
+        "external_lookup": [],
+        "validation": {
+          "citation_ids_and_quotes": true,
+          "inference_disclosure": true,
+          "semantic_entailment": "manual_review_required"
+        },
+        "elapsed_seconds": 25.45,
+        "usage": {
+          "planning": {
+            "input_tokens": 827,
+            "output_tokens": 131,
+            "total_tokens": 958
+          },
+          "generation": {
+            "input_tokens": 8075,
+            "output_tokens": 720,
+            "total_tokens": 8795
+          }
+        },
+        "pipeline": "LangGraph: retrieve → generate"
+      },
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 12.969
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 13.312
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 12.141
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 12.141
+        }
+      ]
+    },
+    {
+      "id": "due_date",
+      "question": "은행 자동납부 출금일은 며칠 중에 선택할 수 있나요?",
+      "selected_ids": [
+        "payment_due_date_change"
+      ],
+      "without_rag": {
+        "text": "죄송하지만, 현재 확인된 자료가 없어 **선택 가능한 은행 자동납부 출금일을 정확히 안내하기 어렵습니다.**\n\nKT 고객센터(휴대폰은 **114**, 인터넷·집전화는 **100**)에서 확인해 주세요.",
+        "seconds": 13.89,
+        "usage": {
+          "input_tokens": 78,
+          "output_tokens": 255,
+          "total_tokens": 333
+        }
+      },
+      "with_rag": {
+        "claims": [
+          {
+            "text": "은행 자동납부 출금일은 매월 18일, 21일, 25일 중 선택할 수 있습니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E4",
+                "quote": "ㆍ 은행 자동이체 : 18일, 21일, 25일 중 선택"
+              }
+            ]
+          },
+          {
+            "text": "선택한 납기일이 공휴일이면 다음 영업일에 출금됩니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E3",
+                "quote": "납기일이 공휴일인 경우는 다음 영업일에 자동이체 인출/승인 됩니다."
+              }
+            ]
+          }
+        ],
+        "follow_up": "",
+        "sources": [
+          {
+            "id": "E4",
+            "title": "요금 납기일은 원하는 날짜로 설정할 수 있나요?",
+            "url": "https://ermsweb.kt.com/pc/faq/faqList.do?qnaId=KNOW0000270708",
+            "parent_chunk_id": "kt_faq_KNOW0000270708",
+            "pages": [],
+            "source_type": "official_faq",
+            "source_type_label": "공식 FAQ",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E3",
+            "title": "휴대폰요금 납기일은 언제인가요?",
+            "url": "https://ermsweb.kt.com/pc/faq/faqList.do?qnaId=KNOW0000270759",
+            "parent_chunk_id": "kt_faq_KNOW0000270759",
+            "pages": [],
+            "source_type": "official_faq",
+            "source_type_label": "공식 FAQ",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          }
+        ],
+        "topic_context": [
+          {
+            "item_id": "payment_due_date_change",
+            "name": "납부 기준일 변경",
+            "summary": "요금 납부 날짜의 선택 범위와 변경 적용 시점을 확인하는 상담.",
+            "scope": "납부일 변경; 납부 계좌 변경과 구별",
+            "source_type": "topic_metadata",
+            "source_type_label": "탐색용 주제 메타데이터",
+            "is_policy_evidence": false
+          }
+        ],
+        "selected_topics": [
+          {
+            "id": "payment_due_date_change",
+            "name": "납부 기준일 변경"
+          }
+        ],
+        "selection_reason": "사용자가 선택한 상담 주제",
+        "warnings": [],
+        "external_lookup": [],
+        "validation": {
+          "citation_ids_and_quotes": true,
+          "inference_disclosure": true,
+          "semantic_entailment": "manual_review_required"
+        },
+        "elapsed_seconds": 7.86,
+        "usage": {
+          "planning": {
+            "input_tokens": 656,
+            "output_tokens": 66,
+            "total_tokens": 722
+          },
+          "generation": {
+            "input_tokens": 4334,
+            "output_tokens": 148,
+            "total_tokens": 4482
+          }
+        },
+        "pipeline": "LangGraph: retrieve → generate"
+      },
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.516
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 3.688
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 4.156
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 4.156
+        }
+      ]
+    },
+    {
+      "id": "other_account",
+      "question": "제 명의 KT 휴대폰 요금을 아버지 명의 계좌로 자동납부 변경하려면 어디로 신청하고 어떤 동의 서류가 필요한가요?",
+      "selected_ids": [
+        "payment_method_change"
+      ],
+      "without_rag": {
+        "text": "아버지 명의 계좌로 변경하려면 **예금주인 아버지의 동의**가 필요합니다.\n\n- **신청·상담:** KT 휴대폰에서 **114(무료)**로 연락해 ‘가족 명의 계좌로 자동납부 변경’을 요청하세요. 전화로 처리할 수 있는지, KT플라자 방문이 필요한지 확인하면 됩니다.\n- **확인할 서류:** 본인·아버지의 신분증, 아버지 계좌정보, **예금주 자동납부 동의서 또는 본인인증**입니다. 신청 방식이나 대리 신청 여부에 따라 **가족관계증명서·위임장** 등이 추가로 필요할 수 있습니다.\n\n현재 KT의 최신 구비서류 기준은 확인하지 못했으므로, 방문 전 114에 **“아버지가 함께 방문해야 하는지, 동의서 양식과 필요한 서류가 무엇인지”**를 확인해 주세요.",
+        "seconds": 16.23,
+        "usage": {
+          "input_tokens": 96,
+          "output_tokens": 433,
+          "total_tokens": 529
+        }
+      },
+      "with_rag": {
+        "claims": [
+          {
+            "text": "본인 명의 KT 휴대폰 요금을 아버지 명의 계좌로 변경하려면, 고객센터 114로 전화하거나 가까운 KT 대리점을 방문해 신청하시면 됩니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E4",
+                "quote": "고객센터(☎114)를 통해 자동이체 변경 가능한가요?"
+              },
+              {
+                "id": "E4",
+                "quote": "타인명의의 계좌 또는 신용/체크카드로 변경하시려면, 가까운 대리점을 방문하시거나 고객센터를 통해 가능하며"
+              }
+            ]
+          },
+          {
+            "text": "준비할 서류는 ① 새 예금주인 아버지 신분증 ② 휴대폰 명의자인 본인 신분증 ③ 아버지가 서명한 납부 동의서 원본 등입니다. 동의서 서명자는 기존 납부자가 아니라 새 예금주인 아버지입니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "이 경우에는 납부자(예금주) 신분증, 명의자 신분증, 납부자(예금자)가 서명한 동의서 원본 등 구비서류가 필요합니다."
+              }
+            ]
+          }
+        ],
+        "follow_up": "",
+        "sources": [
+          {
+            "id": "E4",
+            "title": "고객센터(☎114)를 통해 자동이체 변경 가능한가요?",
+            "url": "https://ermsweb.kt.com/pc/faq/faqList.do?qnaId=KNOW0000270669",
+            "parent_chunk_id": "kt_faq_KNOW0000270669",
+            "pages": [],
+            "source_type": "official_faq",
+            "source_type_label": "공식 FAQ",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E1",
+            "title": "통신비 자동납부 변경",
+            "url": "https://help.kt.com/serviceinfo/BillPaymentGuideL10.do",
+            "parent_chunk_id": "kt_service_BillPaymentGuideL10",
+            "pages": [],
+            "source_type": "service_guide",
+            "source_type_label": "공식 서비스 가이드",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          }
+        ],
+        "topic_context": [
+          {
+            "item_id": "payment_method_change",
+            "name": "자동납부 수단 변경",
+            "summary": "회선 명의를 유지하면서 통신요금 납부 계좌·카드 등 납부수단을 변경하는 상담.",
+            "scope": "납부수단 변경; 명의변경과 구별",
+            "source_type": "topic_metadata",
+            "source_type_label": "탐색용 주제 메타데이터",
+            "is_policy_evidence": false
+          }
+        ],
+        "selected_topics": [
+          {
+            "id": "payment_method_change",
+            "name": "자동납부 수단 변경"
+          }
+        ],
+        "selection_reason": "사용자가 선택한 상담 주제",
+        "warnings": [],
+        "external_lookup": [],
+        "validation": {
+          "citation_ids_and_quotes": true,
+          "inference_disclosure": true,
+          "semantic_entailment": "manual_review_required"
+        },
+        "elapsed_seconds": 25.52,
+        "usage": {
+          "planning": {
+            "input_tokens": 683,
+            "output_tokens": 109,
+            "total_tokens": 792
+          },
+          "generation": {
+            "input_tokens": 5034,
+            "output_tokens": 431,
+            "total_tokens": 5465
+          }
+        },
+        "pipeline": "LangGraph: retrieve → generate"
+      },
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.922
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 4.031
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 21.485
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 21.485
+        }
+      ]
+    },
+    {
+      "id": "transfer",
+      "question": "KT 휴대폰을 가족에게 명의변경하려면 어떤 절차와 구비서류를 확인해야 하나요?",
+      "selected_ids": [
+        "mobile_ownership_transfer"
+      ],
+      "without_rag": {
+        "text": "가족에게 KT 휴대폰 명의를 변경하려면 **가족관계와 방문자에 따른 구비서류를 먼저 확인한 뒤, 명의변경이 가능한 KT 매장에 방문**하시면 됩니다. 다만, 현재 KT의 세부 기준을 확인할 자료가 없어 아래는 일반적인 준비 안내입니다.\n\n**1. 방문 전 확인할 사항**\n- 명의를 주는 분과 받는 분의 관계가 명의변경 가능한 가족 범위에 해당하는지\n- 두 분이 함께 방문해야 하는지, 한 분만 방문해도 되는지\n- 방문할 매장에서 명의변경 업무를 처리하는지\n\n**2. 일반적으로 준비하는 서류**\n- 두 분이 함께 방문하는 경우: **각자의 신분증**, **가족관계를 증명하는 서류**(가족관계증명서 등)\n- 한 분만 방문하거나 대리인이 방문하는 경우: 위임장 등 추가 서류가 필요할 수 있음\n- 미성년자가 관련된 경우: 법정대리인 동의 및 관계 확인 서류가 추가될 수 있음\n\n서류의 **발급일 기준, 주민등록번호 공개 범위, 원본 필요 여부**는 방문 전에 확인하세요.\n\n**3. 변경 전 함께 확인할 내용**\n미납요금, 단말기 할부금, 약정·할인 반환금 여부와 함께 **선택약정·가족결합 할인·보험 등의 승계 또는 종료 여부**도 확인하는 것이 좋습니다.\n\nKT 휴대폰에서 **114**로 전화해 “가족 간 명의변경”이라고 말씀하시고, 가족관계와 실제 방문자를 알려주면 필요한 서류를 구체적으로 안내받을 수 있습니다.",
+        "seconds": 14.05,
+        "usage": {
+          "input_tokens": 86,
+          "output_tokens": 476,
+          "total_tokens": 562
+        }
+      },
+      "with_rag": {
+        "claims": [
+          {
+            "text": "먼저 기존 명의자(양도인)와 새 명의자가 될 가족(양수인) 중 누가 방문할지 확인하세요. 성인 개인 간 변경의 기본 서류는 ① 두 분 모두 방문: 각자 신분증 ② 기존 명의자만 방문: 본인 신분증 + 새 명의자의 인감증명서·위임장(인감도장) ③ 새 명의자만 방문: 본인 신분증 + 기존 명의자의 인감증명서·위임장(인감도장)입니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "| 개인 고객간  <br>양도 시 | 양도인 | 신분증 | 신분증 | 양도인 인감증명서,  <br>양도인 위임장(인감도장) |\n| 개인 고객간  <br>양도 시 | 양수인 | 신분증 | 양수인 인감증명서,  <br>양수인 위임장(인감도장) | 신분증 |"
+              }
+            ]
+          },
+          {
+            "text": "휴대폰은 새 명의자만 방문하더라도 기존 명의자와 통화가 가능하면 위임장·인감증명서를 제외할 수 있습니다. 반대로 기존 명의자만 방문하면 통화 가능 여부와 관계없이 새 명의자의 위임장·인감증명서가 필요합니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "모바일 상품 명의 변경 시 개인과 개인 변경의 경우 양수인만 방문 시 양도인과 통화 가능한 경우에는 위임장, 인감 증명서 제외가능  \n  (단, 양도인만 방문 시는 통화여부 상관없이 위임장, 인감 증명서 필수)"
+              }
+            ]
+          },
+          {
+            "text": "미성년자가 포함되면 법정대리인 신분증, 법정대리인 인감증명서 및 동의서(인감날인), 가족관계 확인서류 등 추가 서류를 확인해야 합니다. 법정대리인이 동행하면 인감증명서는 제외됩니다. 가족관계 확인서류는 관계 확인이 가능한 주민등록등본 또는 가족관계증명서입니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "신분증, 법정대리인 인감증명서 및 동의서 (인감날인), 법정대리인 신분증, 가족증명서류"
+              },
+              {
+                "id": "E1",
+                "quote": "법정대리인 동행 시 인감증명서는 제외  \n  (가족증명서류 : 주민등록등본, 가족관계증명서 중 택1(2가지 서류 모두 가족관계확인이 가능해야 함))"
+              }
+            ]
+          },
+          {
+            "text": "이 가이드의 온라인 명의변경 신청 대상에는 휴대폰이 포함되지 않습니다. 휴대폰에 유선상품의 온라인 신청 절차를 적용하지 않도록 주의하세요.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "## 온라인 명의변경 신청 안내\n\n- 집전화, 인터넷, 인터넷전화, tv(조건부), 기가 IoT만 신청 가능합니다."
+              }
+            ]
+          }
+        ],
+        "follow_up": "어떤 가족에게 넘기시나요? 두 분 모두 성인이신지, 두 분 중 누가 방문할 예정인지 알려주시면 해당 경우의 준비서류로 좁혀 안내해 드리겠습니다.",
+        "sources": [
+          {
+            "id": "E1",
+            "title": "명의변경 방법",
+            "url": "https://help.kt.com/serviceinfo/ServiceAlterGuideL1.do",
+            "parent_chunk_id": "kt_service_ServiceAlterGuideL1",
+            "pages": [],
+            "source_type": "service_guide",
+            "source_type_label": "공식 서비스 가이드",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          }
+        ],
+        "topic_context": [
+          {
+            "item_id": "mobile_ownership_transfer",
+            "name": "휴대폰 명의변경",
+            "summary": "휴대폰 계약 명의 이전의 가능 범위와 방문·준비서류를 확인하는 상담.",
+            "scope": "모바일 관련 안내만 적용; 가이드의 유선 온라인 신청 안내는 제외",
+            "source_type": "topic_metadata",
+            "source_type_label": "탐색용 주제 메타데이터",
+            "is_policy_evidence": false
+          }
+        ],
+        "selected_topics": [
+          {
+            "id": "mobile_ownership_transfer",
+            "name": "휴대폰 명의변경"
+          }
+        ],
+        "selection_reason": "사용자가 선택한 상담 주제",
+        "warnings": [],
+        "external_lookup": [],
+        "validation": {
+          "citation_ids_and_quotes": true,
+          "inference_disclosure": true,
+          "semantic_entailment": "manual_review_required"
+        },
+        "elapsed_seconds": 20.92,
+        "usage": {
+          "planning": {
+            "input_tokens": 665,
+            "output_tokens": 95,
+            "total_tokens": 760
+          },
+          "generation": {
+            "input_tokens": 5253,
+            "output_tokens": 936,
+            "total_tokens": 6189
+          }
+        },
+        "pipeline": "LangGraph: retrieve → generate"
+      },
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.297
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 3.375
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 17.531
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 17.531
+        }
+      ]
+    },
+    {
+      "id": "renewal",
+      "question": "KT 선택약정 24개월이 끝나면 25% 할인이 자동으로 연장되나요?",
+      "selected_ids": [
+        "selective_contract_discount"
+      ],
+      "without_rag": {
+        "text": "아니요. **24개월 선택약정이 끝나면 25% 요금할인이 자동으로 연장되지는 않습니다.** 계속 할인받으려면 선택약정 재약정을 신청해야 합니다.\n\n마이케이티 앱이나 KT 휴대폰에서 **114(무료)**로 재약정 신청 여부와 만료일을 확인해 보세요.",
+        "seconds": 21.45,
+        "usage": {
+          "input_tokens": 82,
+          "output_tokens": 250,
+          "total_tokens": 332
+        }
+      },
+      "with_rag": {
+        "claims": [
+          {
+            "text": "24개월 선택약정이 끝나면 자동 연장되기보다는, 25% 할인을 계속 받으려면 재약정을 신청해야 하는 것으로 판단됩니다. 확인한 문서에는 이 결론이 직접 명시되어 있지 않습니다.",
+            "inferred": true,
+            "citations": [
+              {
+                "id": "E1",
+                "quote": "선택약정을 다시 신청하셔서 할인을 계속 받을 수 있어요."
+              },
+              {
+                "id": "E2",
+                "quote": "선택약정(요금할인) 재약정은 KT닷컴 또는 마이케이티 앱을 통해 가입이 가능합니다."
+              }
+            ]
+          },
+          {
+            "text": "재약정은 KT닷컴 또는 마이케이티 앱의 ‘마이 → 가입/이용/해지 → 가입정보 변경 → 요금할인 재약정’에서 신청할 수 있습니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E2",
+                "quote": "ㆍ KT닷컴 → 마이 → 가입/이용/해지 → 가입정보 변경 → 요금할인 재약정"
+              },
+              {
+                "id": "E2",
+                "quote": "ㆍ 마이케이티 앱 → 메뉴 → 마이 → 가입/이용/해지 → 가입정보 변경 → 요금할인 재약정"
+              }
+            ]
+          },
+          {
+            "text": "참고로 ‘12개월(추가 12개월 사전예약)’은 첫 12개월 만료 후 추가 12개월이 자동 가입되는 별도 방식입니다. 질문하신 24개월 약정과는 구분됩니다.",
+            "inferred": false,
+            "citations": [
+              {
+                "id": "E5",
+                "quote": "선택약정(요금할인)은 12개월, 24개월, 12개월(추가 12개월 사전예약) 약정 시 제공됩니다."
+              },
+              {
+                "id": "E5",
+                "quote": "12개월(추가 12개월 사전예약) : 12개월 경과 시 기존 약정은 만료되고, 추가 12개월이 자동으로 가입됨"
+              }
+            ]
+          }
+        ],
+        "follow_up": "",
+        "sources": [
+          {
+            "id": "E1",
+            "title": "선택약정할인 제도 안내",
+            "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1657",
+            "parent_chunk_id": "kt_mobile_1657_01_01",
+            "pages": [],
+            "source_type": "discount_guide",
+            "source_type_label": "공식 할인 안내",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E2",
+            "title": "온라인으로 선택약정(요금할인)에 가입이 가능한가요?",
+            "url": "https://ermsweb.kt.com/pc/faq/faqList.do?qnaId=KNOW0000271075",
+            "parent_chunk_id": "kt_faq_KNOW0000271075",
+            "pages": [],
+            "source_type": "official_faq",
+            "source_type_label": "공식 FAQ",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          },
+          {
+            "id": "E5",
+            "title": "선택약정(요금할인)에 약정기간이 있나요?",
+            "url": "https://ermsweb.kt.com/pc/faq/faqList.do?qnaId=KNOW0000271241",
+            "parent_chunk_id": "kt_faq_KNOW0000271241",
+            "pages": [],
+            "source_type": "official_faq",
+            "source_type_label": "공식 FAQ",
+            "source_format": "웹 페이지",
+            "source_origin": "saved_document",
+            "source_origin_label": "저장한 공식 자료",
+            "fetched_at": null
+          }
+        ],
+        "topic_context": [
+          {
+            "item_id": "selective_contract_discount",
+            "name": "선택약정 할인 가입",
+            "summary": "선택약정 요금할인의 가입 대상·신청·약정기간을 확인하는 상담.",
+            "scope": "가입·재가입 중심; 중도 변경·반환금은 후속 확인",
+            "source_type": "topic_metadata",
+            "source_type_label": "탐색용 주제 메타데이터",
+            "is_policy_evidence": false
+          }
+        ],
+        "selected_topics": [
+          {
+            "id": "selective_contract_discount",
+            "name": "선택약정 할인 가입"
+          }
+        ],
+        "selection_reason": "사용자가 선택한 상담 주제",
+        "warnings": [],
+        "external_lookup": [],
+        "validation": {
+          "citation_ids_and_quotes": true,
+          "inference_disclosure": true,
+          "semantic_entailment": "manual_review_required"
+        },
+        "elapsed_seconds": 21.7,
+        "usage": {
+          "planning": {
+            "input_tokens": 654,
+            "output_tokens": 106,
+            "total_tokens": 760
+          },
+          "generation": {
+            "input_tokens": 4335,
+            "output_tokens": 428,
+            "total_tokens": 4763
+          }
+        },
+        "pipeline": "LangGraph: retrieve → generate"
+      },
+      "timings": [
+        {
+          "stage": "01_chat_query.md",
+          "seconds": 3.985
+        },
+        {
+          "stage": "retrieve_total",
+          "seconds": 4.079
+        },
+        {
+          "stage": "03_generate.md",
+          "seconds": 17.625
+        },
+        {
+          "stage": "generate_total",
+          "seconds": 17.625
+        }
+      ]
+    }
+  ],
+  "repeat_original": {
+    "result": {
+      "claims": [
+        {
+          "text": "말씀하신 것처럼 본인 명의 KT 휴대폰의 납부계좌만 부모님 계좌에서 본인 계좌로 바꾸는 경우라면, 통상 부모님의 별도 동의는 필요하지 않은 것으로 판단됩니다. 안내된 예금주 동의서 요건은 타인 명의 계좌로 변경하는 경우에 해당합니다. 다만 확인한 문서에는 이 결론이 직접 명시되어 있지 않습니다.",
+          "inferred": true,
+          "citations": [
+            {
+              "id": "E1",
+              "quote": "상품 가입 명의자의 계좌, 간편결제(카카오페이/네이버페이/토스페이/페이코) 또는 신용/체크카드로만 변경 가능합니다."
+            },
+            {
+              "id": "E1",
+              "quote": "타인명의의 계좌 또는 신용/체크카드로 변경하시려면, 가까운 대리점을 방문하시거나 고객센터(국번없이 100번) 전화상담을 통해 가능하며, 이 경우에는 납부자(예금주) 신분증, 명의자 신분증, 납부자(예금자)가 서명한 동의서 원본 등 구비서류가 필요합니다."
+            }
+          ]
+        },
+        {
+          "text": "변경은 마이KT의 ‘마이 > 요금/서비스 > 요금납부 > 납부방법 변경’에서 본인 인증 후 신청할 수 있습니다.",
+          "inferred": false,
+          "citations": [
+            {
+              "id": "E2",
+              "quote": "또는 마이 > 요금/서비스 > 요금납부 > 납부방법 변경에서 신청/변경하시면 됩니다.  <br>  * 단, 마이페이지에서 신청/변경 시 본인 인증 후 자동이체로 변경 가능합니다."
+            }
+          ]
+        },
+        {
+          "text": "가족결합이 ‘총액 결합할인’ 또는 ‘프리미엄 가족결합’이라면, 명의·가족관계·회선·요금제는 그대로 두고 납부계좌만 바꾸는 것으로는 결합 유지에 영향이 없을 것으로 판단됩니다. 확인한 문서에는 이 결론이 직접 명시되어 있지 않습니다. 다른 결합상품이라면 해당 상품 조건을 확인해야 합니다.",
+          "inferred": true,
+          "citations": [
+            {
+              "id": "E5",
+              "quote": "KT 인터넷 명의자 기준으로 모바일 명의자가 동일인이거나 가족관계인 경우"
+            },
+            {
+              "id": "E3",
+              "quote": "KT 인터넷 명의자 기준으로  \n  모바일 명의자가  \n  동일인이거나 가족관계인 경우"
+            },
+            {
+              "id": "E4",
+              "quote": "가구 내 할인 대상 요금제 이용 고객이 1회선 이상 포함 시 가입 가능하며, 할인액은 할인 대상 요금제 이용 고객이 2회선 이상 포함 시 제공됩니다."
+            }
+          ]
+        }
+      ],
+      "follow_up": "현재 이용 중인 가족결합 상품명이 무엇인가요?",
+      "sources": [
+        {
+          "id": "E1",
+          "title": "통신비 자동납부 변경",
+          "url": "https://help.kt.com/serviceinfo/BillPaymentGuideL10.do",
+          "parent_chunk_id": "kt_service_BillPaymentGuideL10",
+          "pages": [],
+          "source_type": "service_guide",
+          "source_type_label": "공식 서비스 가이드",
+          "source_format": "웹 페이지",
+          "source_origin": "saved_document",
+          "source_origin_label": "저장한 공식 자료",
+          "fetched_at": null
+        },
+        {
+          "id": "E2",
+          "title": "자동납부",
+          "url": "https://help.kt.com/serviceinfo/BillPaymentGuideL3.do",
+          "parent_chunk_id": "kt_service_BillPaymentGuideL3",
+          "pages": [],
+          "source_type": "service_guide",
+          "source_type_label": "공식 서비스 가이드",
+          "source_format": "웹 페이지",
+          "source_origin": "saved_document",
+          "source_origin_label": "저장한 공식 자료",
+          "fetched_at": null
+        },
+        {
+          "id": "E5",
+          "title": "총액 결합할인",
+          "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1133",
+          "parent_chunk_id": "kt_bundle_1133_03",
+          "pages": [],
+          "source_type": "product_detail",
+          "source_type_label": "공식 상품 안내",
+          "source_format": "웹 페이지",
+          "source_origin": "saved_document",
+          "source_origin_label": "저장한 공식 자료",
+          "fetched_at": null
+        },
+        {
+          "id": "E3",
+          "title": "프리미엄 가족결합",
+          "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1193",
+          "parent_chunk_id": "kt_bundle_1193_06",
+          "pages": [],
+          "source_type": "product_detail",
+          "source_type_label": "공식 상품 안내",
+          "source_format": "웹 페이지",
+          "source_origin": "saved_document",
+          "source_origin_label": "저장한 공식 자료",
+          "fetched_at": null
+        },
+        {
+          "id": "E4",
+          "title": "프리미엄 가족결합",
+          "url": "https://product.kt.com/wDic/productDetail.do?ItemCode=1193",
+          "parent_chunk_id": "kt_bundle_1193_07",
+          "pages": [],
+          "source_type": "product_detail",
+          "source_type_label": "공식 상품 안내",
+          "source_format": "웹 페이지",
+          "source_origin": "saved_document",
+          "source_origin_label": "저장한 공식 자료",
+          "fetched_at": null
+        }
+      ],
+      "topic_context": [
+        {
+          "item_id": "payment_method_change",
+          "name": "자동납부 수단 변경",
+          "summary": "회선 명의를 유지하면서 통신요금 납부 계좌·카드 등 납부수단을 변경하는 상담.",
+          "scope": "납부수단 변경; 명의변경과 구별",
+          "source_type": "topic_metadata",
+          "source_type_label": "탐색용 주제 메타데이터",
+          "is_policy_evidence": false
+        },
+        {
+          "item_id": "family_bundle_maintenance",
+          "name": "가족결합 유지 조건 확인",
+          "summary": "계좌·명의·요금제·회선 상태 변경이 기존 가족결합 조건에 영향을 주는지 확인하는 상담.",
+          "scope": "확보한 총액·프리미엄 가족결합 조건을 우선 참고; 다른 상품으로 일반화하지 않음",
+          "source_type": "topic_metadata",
+          "source_type_label": "탐색용 주제 메타데이터",
+          "is_policy_evidence": false
+        }
+      ],
+      "selected_topics": [
+        {
+          "id": "payment_method_change",
+          "name": "자동납부 수단 변경"
+        },
+        {
+          "id": "family_bundle_maintenance",
+          "name": "가족결합 유지 조건 확인"
+        }
+      ],
+      "selection_reason": "사용자가 선택한 상담 주제",
+      "warnings": [
+        {
+          "kind": "evidence_partial",
+          "item_id": "family_bundle_maintenance",
+          "notes": [
+            "기존 10개 파일럿의 목적·별칭·연결을 유지했습니다. 근거 본문의 세부 적용 범위는 다음 연결 점검에서 확인합니다.",
+            "실제 결합상품명을 확인하고 원문에 없는 유지 결론은 추론 고지를 붙입니다."
+          ],
+          "external_lookup_topics": []
+        }
+      ],
+      "external_lookup": [],
+      "validation": {
+        "citation_ids_and_quotes": true,
+        "inference_disclosure": true,
+        "semantic_entailment": "manual_review_required"
+      },
+      "elapsed_seconds": 30.34,
+      "usage": {
+        "planning": {
+          "input_tokens": 827,
+          "output_tokens": 137,
+          "total_tokens": 964
+        },
+        "generation": {
+          "input_tokens": 8075,
+          "output_tokens": 704,
+          "total_tokens": 8779
+        }
+      },
+      "pipeline": "LangGraph: retrieve → generate"
+    },
+    "timings": [
+      {
+        "stage": "01_chat_query.md",
+        "seconds": 9.578
+      },
+      {
+        "stage": "retrieve_total",
+        "seconds": 9.672
+      },
+      {
+        "stage": "03_generate.md",
+        "seconds": 20.672
+      },
+      {
+        "stage": "generate_total",
+        "seconds": 20.672
+      }
+    ]
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "reason": "서류 설명에 자격·제한 FAQ가 검색 순위에 밀려 누락됨. 대표 근거에 추가하여 검색 점수와 무관하게 보존.",
+  "data_fingerprint": "198fa60cc7507421306eb857461c49a7916224f5c486ca6432d9ae3f3f56d4bf",
+  "representatives": [
+    "kt_service_ServiceAlterGuideL1",
+    "kt_faq_KNOW0001270977"
+  ],
+  "index": {
+    "kt_task_meta": {
+      "records": 103,
+      "removed_stale_records": 0
+    },
+    "kt_evidence": {
+      "records": 2091,
+      "removed_stale_records": 0
+    },
+    "embeddings_computed": 0
+  },
+  "result": {
+    "claims": [
+      {
+        "text": "KT 휴대폰은 가족 간 명의변경이 제한의 예외로 안내되어 있습니다. 기존 명의자가 ‘양도인’, 명의를 넘겨받는 가족이 ‘양수인’입니다.",
+        "inferred": false,
+        "citations": [
+          {
+            "id": "E2",
+            "quote": "명의변경이 번호 매매 수단으로 악용됨에 따라 2016년 3월 부터 가족간 등 일부 경우를 제외하고는 명의변경이 제한됩니다."
+          },
+          {
+            "id": "E1",
+            "quote": "양도인(주는사람)"
+          },
+          {
+            "id": "E1",
+            "quote": "양수인(받는 사람)"
+          }
+        ]
+      },
+      {
+        "text": "안내된 온라인 명의변경 신청 대상에는 휴대폰이 포함되어 있지 않습니다. 아래 방문자별 서류를 기준으로 준비하시면 됩니다.",
+        "inferred": false,
+        "citations": [
+          {
+            "id": "E1",
+            "quote": "집전화, 인터넷, 인터넷전화, tv(조건부), 기가 IoT만 신청 가능합니다."
+          },
+          {
+            "id": "E1",
+            "quote": "명의변경시 월 계약자가 있을 경우 당사자 모두 방문하시는경우, 양도인만 방문하시는 경우, 양수인만 방문하시는 경우 별 필요 서류를 나타낸 표 입니다."
+          }
+        ]
+      },
+      {
+        "text": "성인 개인 간 변경의 기본 서류는 다음과 같습니다.\n• 두 분 모두 방문: 각자 신분증\n• 기존 명의자만 방문: 기존 명의자 신분증 + 새 명의자의 인감증명서·위임장(인감도장)\n• 새 명의자만 방문: 새 명의자 신분증 + 기존 명의자의 인감증명서·위임장(인감도장)",
+        "inferred": false,
+        "citations": [
+          {
+            "id": "E1",
+            "quote": "| 개인 고객간  <br>양도 시 | 양도인 | 신분증 | 신분증 | 양도인 인감증명서,  <br>양도인 위임장(인감도장) |\n| 개인 고객간  <br>양도 시 | 양수인 | 신분증 | 양수인 인감증명서,  <br>양수인 위임장(인감도장) | 신분증 |"
+          }
+        ]
+      },
+      {
+        "text": "다만 휴대폰은 새 명의자만 방문하더라도 기존 명의자와 통화가 가능하면 기존 명의자의 위임장·인감증명서를 생략할 수 있습니다. 반대로 기존 명의자만 방문하면 통화 가능 여부와 관계없이 새 명의자의 위임장·인감증명서가 필요합니다.",
+        "inferred": false,
+        "citations": [
+          {
+            "id": "E1",
+            "quote": "모바일 상품 명의 변경 시 개인과 개인 변경의 경우 양수인만 방문 시 양도인과 통화 가능한 경우에는 위임장, 인감 증명서 제외가능  \n  (단, 양도인만 방문 시는 통화여부 상관없이 위임장, 인감 증명서 필수)"
+          }
+        ]
+      },
+      {
+        "text": "미성년자가 관련되면 법정대리인 신분증, 인감증명서 및 동의서(인감날인), 가족증명서류 등 추가 서류를 확인해야 합니다. 법정대리인이 동행하면 인감증명서는 제외되며, 가족증명서류는 가족관계 확인이 가능한 주민등록등본 또는 가족관계증명서로 안내됩니다.",
+        "inferred": false,
+        "citations": [
+          {
+            "id": "E1",
+            "quote": "신분증, 법정대리인 인감증명서 및 동의서 (인감날인), 법정대리인 신분증, 가족증명서류"
+          },
+          {
+            "id": "E1",
+            "quote": "법정대리인 동행 시 인감증명서는 제외  \n  (가족증명서류 : 주민등록등본, 가족관계증명서 중 택1(2가지 서류 모두 가족관계확인이 가능해야 함))"
+          }
+        ]
+      }
+    ],
+    "follow_up": "명의를 넘겨받을 분과의 가족관계, 두 분의 성인 여부, 누가 방문할 예정인지 알려주시면 해당 경우의 준비서류로 좁혀 안내하겠습니다.",
+    "sources": [
+      {
+        "id": "E2",
+        "title": "명의변경은 가족간에만 가능한가요?",
+        "url": "https://ermsweb.kt.com/pc/faq/faqList.do?qnaId=KNOW0001270977",
+        "parent_chunk_id": "kt_faq_KNOW0001270977",
+        "pages": [],
+        "source_type": "official_faq",
+        "source_type_label": "공식 FAQ",
+        "source_format": "웹 페이지",
+        "source_origin": "saved_document",
+        "source_origin_label": "저장한 공식 자료",
+        "fetched_at": null
+      },
+      {
+        "id": "E1",
+        "title": "명의변경 방법",
+        "url": "https://help.kt.com/serviceinfo/ServiceAlterGuideL1.do",
+        "parent_chunk_id": "kt_service_ServiceAlterGuideL1",
+        "pages": [],
+        "source_type": "service_guide",
+        "source_type_label": "공식 서비스 가이드",
+        "source_format": "웹 페이지",
+        "source_origin": "saved_document",
+        "source_origin_label": "저장한 공식 자료",
+        "fetched_at": null
+      }
+    ],
+    "topic_context": [
+      {
+        "item_id": "mobile_ownership_transfer",
+        "name": "휴대폰 명의변경",
+        "summary": "휴대폰 계약 명의 이전의 가능 범위와 방문·준비서류를 확인하는 상담.",
+        "scope": "모바일 관련 안내만 적용; 가이드의 유선 온라인 신청 안내는 제외",
+        "source_type": "topic_metadata",
+        "source_type_label": "탐색용 주제 메타데이터",
+        "is_policy_evidence": false
+      }
+    ],
+    "selected_topics": [
+      {
+        "id": "mobile_ownership_transfer",
+        "name": "휴대폰 명의변경"
+      }
+    ],
+    "selection_reason": "사용자가 선택한 상담 주제",
+    "warnings": [],
+    "external_lookup": [],
+    "validation": {
+      "citation_ids_and_quotes": true,
+      "inference_disclosure": true,
+      "semantic_entailment": "manual_review_required"
+    },
+    "elapsed_seconds": 37.77,
+    "usage": {
+      "planning": {
+        "input_tokens": 665,
+        "output_tokens": 101,
+        "total_tokens": 766
+      },
+      "generation": {
+        "input_tokens": 5604,
+        "output_tokens": 1170,
+        "total_tokens": 6774
+      }
+    },
+    "pipeline": "LangGraph: retrieve → generate"
+  }
+}

@@ -1,0 +1,132 @@
+{
+  "kind": "Stage1 planning and retrieval development checks, not answer accuracy",
+  "results": [
+    {
+      "case": "payment_short",
+      "question": "언제부터 적용돼?",
+      "input_selected_ids": [
+        "payment_method_change"
+      ],
+      "chosen_ids": [
+        "payment_method_change"
+      ],
+      "plan": {
+        "retrieval_query": "KT 모바일 통신요금 자동납부 수단을 계좌 또는 카드로 변경하면 언제부터 적용되는가?",
+        "external_queries": [],
+        "needs_external": false,
+        "reason": "자동납부 수단 변경의 적용 시점에 관한 상시 안내이므로 외부조회가 필요하지 않음"
+      },
+      "evidence_count": 3,
+      "source_titles": [
+        "통신비 자동납부 변경",
+        "자동납부",
+        "신용카드 자동 납부에 대해서 알고싶어요"
+      ],
+      "usage": {
+        "planning": {
+          "input_tokens": 652,
+          "output_tokens": 72,
+          "total_tokens": 724
+        }
+      },
+      "ok": true,
+      "elapsed_seconds": 2.91
+    },
+    {
+      "case": "due_short",
+      "question": "언제부터 적용돼?",
+      "input_selected_ids": [
+        "payment_due_date_change"
+      ],
+      "chosen_ids": [
+        "payment_due_date_change"
+      ],
+      "plan": {
+        "retrieval_query": "KT 모바일 요금 납부 기준일 변경 신청 시 변경된 납부일은 언제부터 적용되는가?",
+        "external_queries": [],
+        "needs_external": false,
+        "reason": "납부 기준일 변경의 적용 시점을 확인하는 상시 납부 업무 안내이므로 외부 조회가 필요하지 않음"
+      },
+      "evidence_count": 4,
+      "source_titles": [
+        "납기일",
+        "통신비 자동납부 변경",
+        "휴대폰요금 납기일은 언제인가요?",
+        "요금 납기일은 원하는 날짜로 설정할 수 있나요?"
+      ],
+      "usage": {
+        "planning": {
+          "input_tokens": 643,
+          "output_tokens": 75,
+          "total_tokens": 718
+        }
+      },
+      "ok": true,
+      "elapsed_seconds": 2.88
+    },
+    {
+      "case": "ownership_documents",
+      "question": "어떤 서류가 필요해?",
+      "input_selected_ids": [
+        "mobile_ownership_transfer"
+      ],
+      "chosen_ids": [
+        "mobile_ownership_transfer"
+      ],
+      "plan": {
+        "retrieval_query": "KT 휴대폰 명의변경 시 필요한 서류와 양도인·양수인 관계, 방문자, 연령에 따른 준비서류 차이",
+        "external_queries": [],
+        "needs_external": false,
+        "reason": "휴대폰 명의변경 준비서류에 관한 상시 안내로 내부 검색을 우선함"
+      },
+      "evidence_count": 1,
+      "source_titles": [
+        "명의변경 방법"
+      ],
+      "usage": {
+        "planning": {
+          "input_tokens": 646,
+          "output_tokens": 78,
+          "total_tokens": 724
+        }
+      },
+      "ok": true,
+      "elapsed_seconds": 3.19
+    },
+    {
+      "case": "auto_follow_up",
+      "question": "그럼 언제부터 적용돼?",
+      "input_selected_ids": [],
+      "chosen_ids": [
+        "payment_method_change"
+      ],
+      "plan": {
+        "retrieval_query": "본인 명의 KT 휴대폰 회선은 유지하고 요금 자동납부 계좌만 부모님 계좌에서 본인 계좌로 변경할 때, 변경한 계좌는 언제부터 적용되는가?",
+        "external_queries": [],
+        "needs_external": false,
+        "reason": "자동납부 계좌 변경의 적용 시점에 관한 상시 안내로 외부조회가 필요하지 않음"
+      },
+      "evidence_count": 4,
+      "source_titles": [
+        "통신비 자동납부 변경",
+        "자동납부",
+        "고객센터(☎114)를 통해 자동이체 변경 가능한가요?",
+        "자동이체 신청 방법은 어떻게 되나요?"
+      ],
+      "usage": {
+        "selection": {
+          "input_tokens": 6062,
+          "output_tokens": 48,
+          "total_tokens": 6110
+        },
+        "planning": {
+          "input_tokens": 695,
+          "output_tokens": 92,
+          "total_tokens": 787
+        }
+      },
+      "ok": true,
+      "elapsed_seconds": 5.44
+    }
+  ]
+}

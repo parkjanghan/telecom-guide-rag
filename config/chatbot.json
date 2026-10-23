@@ -1,12 +1,13 @@
 {
- "external_enabled": true,
- "timeout_seconds": 5,
- "max_download_bytes": 8000000,
- "request_interval_seconds": 0.5,
- "max_search_queries": 1,
- "max_fetch_documents": 2,
- "search_ttl_seconds": 3600,
- "document_ttl_seconds": 21600,
- "external_top_k": 4,
- "max_context_chars": 85000
+  "external_enabled": true,
+  "timeout_seconds": 5,
+  "max_download_bytes": 8000000,
+  "request_interval_seconds": 0.5,
+  "max_search_queries": 1,
+  "max_fetch_documents": 2,
+  "search_ttl_seconds": 3600,
+  "document_ttl_seconds": 21600,
+  "external_top_k": 4,
+  "max_context_chars": 85000,
+  "empty_search_ttl_seconds": 300
 }

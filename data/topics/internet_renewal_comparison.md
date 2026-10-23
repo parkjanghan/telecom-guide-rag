@@ -15,7 +15,10 @@ review_notes: ["게시판 질문은 수요 발견용입니다. 게시판 답변�
 schema_version: "1.0"
 review_status: "draft"
 answer_ready: false
-retrieval_ready: true
+retrieval_ready: false
+service_status: "unsupported_draft"
+support_checked_at: "2026-10-23"
+support_reason: "재약정·타사 이동 비교의 대표 공식 근거 미연결. 개인별 제안·사은품·타사 견적을 확인할 자료가 필요합니다."
 source_type: "generated_topic_metadata"
 is_policy_evidence: false
 generation_method: "curated intent fields + existing official chunk links; draft"
@@ -48,7 +51,7 @@ index_text: "상담 주제: 인터넷·TV 재약정과 통신사 이동 비교\n
 
 ## 연결 근거
 
-공식 근거 청크 미연결. 주제 탐색은 가능하지만 이 항목만으로 정책 답변을 생성하지 않습니다.
+공식 근거 청크 미연결. 조사용 초안으로 보존하며 서비스 선택·자동 추천·질의응답 대상에서 제외합니다. 적절한 대표 근거를 확보하고 재검토한 후 다시 지원할 수 있습니다.
 
 ## 검토 메모
 
